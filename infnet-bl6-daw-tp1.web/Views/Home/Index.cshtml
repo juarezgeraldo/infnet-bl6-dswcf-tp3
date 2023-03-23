@@ -1,0 +1,102 @@
+﻿@model IEnumerable<infnet_bl6_daw_tp1.Domain.ViewModel.AmigoViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<h1>Agenda de aniversários</h1>
+
+<h3>Aniversariantes de hoje: @DateTime.Today.ToString("dd/MM/yyyy")</h3>
+<h5>
+    <table class="list">
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @if (item.DiasFaltantes == 0)
+                    {
+                        <td>
+                            -
+                            @Html.DisplayFor(modelItem => item.NomeCompleto)
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</h5>
+<br />
+<br />
+
+<h3>Cadastro de amigos</h3>
+
+<p>
+    <a asp-action="Incluir">Incluir</a>
+</p>
+@using (Html.BeginForm())
+{
+    <p>
+        Encontrar amigo: @Html.TextBox("nomePesquisa")
+        <input type="submit" value="Pesquisar" />
+    </p>
+}
+@using (Html.BeginForm("amigosSelecionados", "home", FormMethod.Post))
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr class="text-center">
+                <th>
+                    @Html.DisplayNameFor(model => model.amigoSelecionado)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NomeCompleto)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nascimento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProximoAniversario)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DiasFaltantes)
+                </th>
+                <th>Açoes</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center">
+                    <td>
+                        <input type="checkbox" name="Selecionado" value="@item.Id" checked=@item.amigoSelecionado />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NomeCompleto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nascimento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProximoAniversario)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiasFaltantes)
+                    </td>
+                    <td>
+                        <a asp-action="Alterar" asp-route-id="@item.Id">Alterar</a> |
+                        <a asp-action="Exibir" asp-route-id="@item.Id">Exibir</a> |
+                        <a asp-action="Excluir" asp-route-id="@item.Id">Excluir</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit" name="selecionados">
+        Ver amigos selecionados
+    </button>
+}
